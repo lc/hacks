@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -31,8 +32,18 @@ var client = &http.Client{
 }
 
 func main() {
-	if len(os.Args) >= 2 {
-		Run(os.Args[1])
+	var domains []string
+	flag.Parse()
+	if flag.NArg() > 0 {
+		domains = []string{flag.Arg(0)}
+	} else {
+		s := bufio.NewScanner(os.Stdin)
+		for s.Scan() {
+			domains = append(domains, s.Text())
+		}
+	}
+	for _, domain := range domains {
+		Run(domain)
 	}
 }
 
