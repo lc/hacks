@@ -126,7 +126,7 @@ func getCommonCrawlURLs(domain string) ([]string, error) {
 	var found []string
 	subsWildcard := ""
 	res, err := http.Get(
-		fmt.Sprintf("http://index.commoncrawl.org/CC-MAIN-2018-22-index?url=%s%s/*&output=json", subsWildcard, domain),
+		fmt.Sprintf("http://index.commoncrawl.org/CC-MAIN-2019-43-index?url=%s%s/*&output=json", subsWildcard, domain),
 	)
 	if err != nil {
 		return nil, err
