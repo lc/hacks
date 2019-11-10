@@ -65,16 +65,15 @@ func main() {
 // libsubfinder/helper/misc.go#L51
 func dupe(elements []string) []string {
 	// Use map to record duplicates as we find them.
-	encountered := map[string]bool{}
+	encountered := make(map[string]struct{})
+	
 	result := []string{}
-	for v := range elements {
-		if encountered[elements[v]] {
-			// Do not add duplicate.
-		} else {
+	for _, v := range elements {
+		if _, ok := encountered[v]; !ok {
 			// Record this element as an encountered element.
-			encountered[elements[v]] = true
+			encountered[v] = struct{}{}
 			// Append to result slice.
-			result = append(result, elements[v])
+			result = append(result, v)
 		}
 	}
 	// Return the new slice.
