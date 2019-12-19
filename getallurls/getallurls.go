@@ -27,12 +27,15 @@ type OTXResult struct {
 	} `json:"url_list"`
 }
 
+var IncludeSubs bool
+
 var client = &http.Client{
 	Timeout: time.Second * 20,
 }
 
 func main() {
 	var domains []string
+	flag.BoolVar(&IncludeSubs, "subs", false, "include subdomains of target domain")
 	flag.Parse()
 	if flag.NArg() > 0 {
 		domains = []string{flag.Arg(0)}
@@ -92,9 +95,13 @@ func getOtxUrls(hostname string) ([]string, error) {
 	return urls, nil
 }
 func getWaybackUrls(hostname string) ([]string, error) {
+	wildcard := "*."
 	var waybackresp [][]string
+	if !IncludeSubs {
+		wildcard = ""
+	}
 	var found []string
-	tg := fmt.Sprintf("http://web.archive.org/cdx/search/cdx?url=%s/*&output=json&collapse=urlkey&fl=original", hostname)
+	tg := fmt.Sprintf("http://web.archive.org/cdx/search/cdx?url=%s%s/*&output=json&collapse=urlkey&fl=original", wildcard, hostname)
 	r, err := client.Get(tg)
 	if err != nil {
 		log.Printf("Error in http request: %v\n", err)
@@ -124,9 +131,12 @@ func getWaybackUrls(hostname string) ([]string, error) {
 }
 func getCommonCrawlURLs(domain string) ([]string, error) {
 	var found []string
-	subsWildcard := ""
+	wildcard := "*."
+	if !IncludeSubs {
+		wildcard = ""
+	}
 	res, err := http.Get(
-		fmt.Sprintf("http://index.commoncrawl.org/CC-MAIN-2019-43-index?url=%s%s/*&output=json", subsWildcard, domain),
+		fmt.Sprintf("http://index.commoncrawl.org/CC-MAIN-2019-43-index?url=%s%s/*&output=json", wildcard, domain),
 	)
 	if err != nil {
 		return nil, err
