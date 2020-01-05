@@ -15,9 +15,15 @@ or
 ### install:
 
 ```
+▻ git clone https://github.com/lc/hacks && cd hacks/getallurls
 ▻ go build -o $GOPATH/bin/gau getallurls.go
 ```
 
+or
+
+```
+▻ go get -u github.com/lc/hacks/getallurls/ && mv $GOPATH/bin/getallurls $GOPATH/bin/gau
+```
 
 ## Credits:
 Thanks @tomnomom for [waybackurls](https://github.com/tomnomnom/waybackurls)!
