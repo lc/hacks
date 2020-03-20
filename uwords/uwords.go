@@ -66,7 +66,7 @@ func main() {
 func dupe(elements []string) []string {
 	// Use map to record duplicates as we find them.
 	encountered := make(map[string]struct{})
-	
+
 	result := []string{}
 	for _, v := range elements {
 		if _, ok := encountered[v]; !ok {
